@@ -1,0 +1,59 @@
+version: '3.8'
+services: 
+  nats-server:
+    image: nats:latest
+    ports:
+      - "8222:8222" # NATS server monitoring port
+
+  client-gateway:
+    build:
+     ./client-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client-gateway/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222 
+  
+  products-ms:
+    build:
+     ./products-ms
+    volumes:
+      - ./products-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3001
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=file:./dev.db
+  
+  orders-ms:
+    depends_on:
+      - orders-db
+    build: ./order-ms
+    volumes:
+      - ./order-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3002
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=postgresql://my_user:my_password@orders-db:5432/ordersdb?schema=public
+      # - DATABASE_URL=file:./dev.db
+
+  orders-db:
+    container_name: orders-database
+    image: postgres:latest
+    #restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      database: ${POSTGRES_DB}     
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
