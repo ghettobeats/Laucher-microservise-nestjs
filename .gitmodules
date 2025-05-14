@@ -1,3 +1,6 @@
 [submodule "client-gateway"]
 	path = client-gateway
 	url = https://github.com/ghettobeats/client-gateway.git
+[submodule "order-ms"]
+	path = order-ms
+	url = https://github.com/ghettobeats/order-ms.git
