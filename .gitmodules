@@ -4,3 +4,6 @@
 [submodule "order-ms"]
 	path = order-ms
 	url = https://github.com/ghettobeats/order-ms.git
+[submodule "products-ms"]
+	path = products-ms
+	url = https://github.com/ghettobeats/products-ms.git
