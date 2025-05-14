@@ -1,5 +1,4 @@
+.env
 client-gateway/
 order-ms/
 products-ms/
-
-.env
