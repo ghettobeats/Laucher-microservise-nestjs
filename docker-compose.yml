@@ -9,7 +9,7 @@ services:
     build:
      ./client-gateway
     ports:
-      - "3000:3000"
+      - ${CLIENT_GATEWAYPORT}:3000
     volumes:
       - ./client-gateway/src:/usr/src/app/src
     command: npm run start:dev
